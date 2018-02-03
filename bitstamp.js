@@ -124,7 +124,7 @@ Bitstamp.prototype._get = function(market, action, callback, args) {
   this._request('get', path, undefined, callback, args)
 }
 
-Bitstamp.prototype._post = function(market, action, callback, args, legacy_endpoint) {
+Bitstamp.prototype._post = function(market, action, callback, args, legacy_endpoint, v2) {
   if(!this.key || !this.secret || !this.client_id)
     return callback(new Error('Must provide key, secret and client ID to make this API request.'));
 
@@ -133,6 +133,8 @@ Bitstamp.prototype._post = function(market, action, callback, args, legacy_endpo
   else {
     if(market)
       var path = '/api/v2/' + action + '/' + market + '/';
+    if(v2)
+      var path = '/api/v2/' + action + '/';
     else
       var path = '/api/v2/' + action + '/';
   }
@@ -297,10 +299,11 @@ Bitstamp.prototype.litecoin_address = function(callback) {
 // ethereum
 
 Bitstamp.prototype.eth_withdrawal = function(amount, address, callback) {
+  var v2 = 'version2';
   this._post(null, 'eth_withdrawal', callback, {
     amount: amount,
     address: address
-  }, true);
+  }, false, v2);
 }
 
 Bitstamp.prototype.eth_address = function(callback) {
