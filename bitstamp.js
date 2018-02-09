@@ -128,15 +128,14 @@ Bitstamp.prototype._post = function(market, action, callback, args, legacy_endpo
   if(!this.key || !this.secret || !this.client_id)
     return callback(new Error('Must provide key, secret and client ID to make this API request.'));
 
-  if(legacy_endpoint)
+  if (legacy_endpoint) {
     var path = '/api/' + action + '/';
-  else {
-    if(market)
-      var path = '/api/v2/' + action + '/' + market + '/';
-    if(v2)
-      var path = '/api/v2/' + action + '/';
-    else
-      var path = '/api/v2/' + action + '/';
+  } else if (market) {
+    var path = '/api/v2/' + action + '/' + market + '/';
+  } else if (v2) {
+    var path = '/api/v2/' + action + '/';
+  } else {
+    var path = '/api/v2/' + action + '/';
   }
 
   var nonce = this._generateNonce();
